@@ -1,0 +1,6 @@
+string = input()
+string_list = string.split()
+# print(string_list)
+float_list = list(map(float, string_list))
+rounded_list = list(map(round, float_list))
+print(rounded_list)
