@@ -1,46 +1,27 @@
-def out_of_stock(gift):
-    for item in range(len(list_to_buy)):
-        if list_to_buy[item] == gift:
-            list_to_buy[item] = "None"
+gift_lst = input().split()
 
+command = input()
 
-def required(gift, index):
-    is_valid = True
-    while is_valid:
-        try:
-            list_to_buy[index] = gift
-            break
-        except IndexError:
-            is_valid = False
-
-
-def just_in_case(gift):
-    list_to_buy[-1] = gift
-
-
-gifts_to_buy = input()
-
-list_to_buy = gifts_to_buy.split()
-have_money = True
-while have_money:
-    command = input()
-    if command == "No Money":
-        have_money = False
-        break
+while not command == 'No Money':
     command = command.split()
-    if command[0] == "OutOfStock":
-        gift = command[1]
-        out_of_stock(gift)
-    elif command[0] == "Required":
-        gift = command[1]
-        index = int(command[2])
-        required(gift, index)
-    elif command[0] == "JustInCase":
-        gift = command[1]
-        just_in_case(gift)
+    if command[0] == 'OutOfStock':
+        gift_name = command[1]
+        for gift in gift_lst:
+            if gift == gift_name:
+                gift_idx = gift_lst.index(gift_name)
+                gift_lst[gift_idx] = 'None'
+    elif command[0] == 'Required':
+        gift_name, gift_idx = command[1], int(command[2])
+        if gift_idx in range(len(gift_lst)):
+            gift_lst[gift_idx] = gift_name
+    elif command[0] == 'JustInCase':
+        gift_name = command[1]
+        gift_lst[-1] = gift_name
 
-for i in range(len(list_to_buy)):
-    if "None" in list_to_buy:
-        list_to_buy.remove("None")
+    command = input()
 
-print(*list_to_buy)
+for gift in gift_lst:
+    if gift == 'None':
+        gift_lst.remove(gift)
+
+print(' '.join(gift_lst))
