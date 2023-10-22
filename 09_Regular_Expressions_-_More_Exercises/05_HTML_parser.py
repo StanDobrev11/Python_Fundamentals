@@ -32,7 +32,16 @@ import re
 
 data = input()
 title_pattern = r'<title>(?P<title>.+)</title>'
-body_pattern = r'<body>(?P<body>.+)</body>'
+body_only = r'(?<=<body>)(?P<body>.*)(?=</body>)'
 
-# data = re.findall()
+title = re.findall(title_pattern, data)
+print(f'Title: {"".join(title)}')
+data = re.findall(body_only, data)
 
+data = data[0]
+replace = r'<[^>]+>'
+data = re.sub(replace, '', data)
+
+replace = r'\\n'
+data = re.sub(replace, '', data)
+print(f'Content: {data}')
