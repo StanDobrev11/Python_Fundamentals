@@ -4,72 +4,72 @@ class Hero:
         self.hp = int(hp)
         self.mp = int(mp)
 
-    def cast_spell(self, needed_mp):
-        if self.mp >= needed_mp:
-            self.mp -= needed_mp
-            return True
+    def cast_spell(self, mp_required, spell_name):
+        """ If the hero has the required MP, he casts the spell, thus reducing his MP """
+        mp_required = int(mp_required)
+        if self.mp - mp_required >= 0:
+            self.mp -= mp_required
+            print(f"{self.name} has successfully cast {spell_name} and now has {self.mp} MP!")
+        else:
+            print(f"{self.name} does not have enough MP to cast {spell_name}!")
 
-        return False
+    def take_damage(self, damage, attacker):
+        """ Reduce the hero HP by the given damage amount.
+        If the hero is still alive (his HP is greater than 0) """
 
-    def take_damage(self, damage):
-        if self.hp > damage:
+        damage = int(damage)
+        if self.hp - damage > 0:
             self.hp -= damage
-            return True
-        return False
+            print(f"{self.name} was hit for {damage} HP by {attacker} and now has {self.hp} HP left!")
+        else:
+            del heroes[self.name]
+            print(f"{self.name} has been killed by {attacker}!")
 
     def recharge(self, amount):
-        if self.mp + amount > 200:
-            amount = 200 - self.mp
+
+        amount = int(amount)
+        if self.mp + amount >= 200:
+            print(f"{self.name} recharged for {200 - self.mp} MP!")
             self.mp = 200
         else:
+            print(f"{self.name} recharged for {amount} MP!")
             self.mp += amount
-        return amount
 
     def heal(self, amount):
-        if self.hp + amount > 100:
-            amount = 100 - self.hp
+
+        amount = int(amount)
+        if self.hp + amount >= 100:
+            print(f"{self.name} healed for {100 - self.hp} HP!")
             self.hp = 100
         else:
+            print(f"{self.name} healed for {amount} HP!")
             self.hp += amount
-        return amount
+
+    def __repr__(self):
+        return f"{self.name}\n  HP: {self.hp}\n  MP: {self.mp}"
 
 
-n = int(input())
+command_map = {
+    'CastSpell': Hero.cast_spell,
+    'TakeDamage': Hero.take_damage,
+    'Recharge': Hero.recharge,
+    'Heal': Hero.heal,
+}
 
+num_of_heroes = int(input())
 heroes = {}
-for _ in range(n):
-    name, hp, mp = input().split()
-    heroes[name] = Hero(name, hp, mp)
+for _ in range(num_of_heroes):
+    hero_name, hero_hp, hero_mp = input().split()
+    heroes[hero_name] = Hero(hero_name, hero_hp, hero_mp)
 
-command = input()
-while not command == 'End':
-    command = command.split(' - ')
-    action, hero_name = command[0], command[1]
-    if action == 'CastSpell':
-        needed_mp, spell_name = int(command[2]), command[3]
-        if heroes[hero_name].cast_spell(needed_mp):
-            print(f"{hero_name} has successfully cast {spell_name} and now has {heroes[hero_name].mp} MP!")
-        else:
-            print(f"{hero_name} does not have enough MP to cast {spell_name}!")
-    elif action == 'TakeDamage':
-        damage, attacker = int(command[2]), command[3]
-        if heroes[hero_name].take_damage(damage):
-            print(f'{hero_name} was hit for {damage} HP by {attacker} and now has {heroes[hero_name].hp} HP left!')
-        else:
-            del heroes[hero_name]
-            print(f'{hero_name} has been killed by {attacker}!')
-    elif action == 'Recharge':
-        amount = int(command[2])
-        amount_recovered = heroes[hero_name].recharge(amount)
-        print(f'{hero_name} recharged for {amount_recovered} MP!')
-    elif action == 'Heal':
-        amount = int(command[2])
-        amount_recovered = heroes[hero_name].heal(amount)
-        print(f"{hero_name} healed for {amount_recovered} HP!")
+command_line = input()
 
-    command = input()
+while command_line != 'End':
+    command, *rest = command_line.split(' - ')
 
-for hero in heroes:
-    print(hero)
-    print(f'  HP: {heroes[hero].hp}')
-    print(f'  MP: {heroes[hero].mp}')
+    if command in command_map:
+        command_map[command](heroes[rest[0]], *rest[1:])  # Hero.heal(heroes['SirMullich'], 50)
+
+    command_line = input()
+
+print('\n'.join(hero.__repr__() for hero in heroes.values()))
