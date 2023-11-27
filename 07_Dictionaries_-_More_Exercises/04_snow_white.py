@@ -16,7 +16,7 @@ while command != "Once upon a time":
     current_dwarf = Dwarf(name, color, physics)
     is_updated = False
     for idx, dwarf in enumerate(dwarfs):
-        if name == dwarf.name and color == dwarf.color and physics > dwarf.physics:
+        if name == dwarf.plant_name and color == dwarf.color and physics > dwarf.physics:
             dwarfs[idx] = current_dwarf
             is_updated = True
             break

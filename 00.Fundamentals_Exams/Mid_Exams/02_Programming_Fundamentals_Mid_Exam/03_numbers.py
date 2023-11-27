@@ -4,7 +4,7 @@ def average(av_list):
 
 def top_5(max_list, value):
     max_list.sort()
-    max_list.reverse()
+    max_list.rev()
     max_list = [num for num in max_list if num > value]
     if len(max_list) > 5:
         max_list = max_list[:5]

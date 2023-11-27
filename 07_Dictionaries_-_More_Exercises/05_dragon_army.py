@@ -18,7 +18,7 @@ for _ in range(number_of_dragons):
         dragons_by_type[dragon_type] = []
     else:
         for dragon in dragons_by_type[dragon_type]:
-            if name == dragon.name:
+            if name == dragon.plant_name:
                 dragon.damage = int(damage) if damage != 'null' else 45
                 dragon.health = int(health) if health != 'null' else 250
                 dragon.armor = int(armor) if armor != 'null' else 10
@@ -45,5 +45,5 @@ for color, value in dragons_by_type.items():
 for color, value in dragons_by_type.items():
     av_damage, av_health, av_armor = type_stats[color]
     print(f'{color}::({av_damage:.2f}/{av_health:.2f}/{av_armor:.2f})')
-    for dragon in sorted(value, key=lambda x: x.name):
-        print(f'-{dragon.name} -> damage: {dragon.damage}, health: {dragon.health}, armor: {dragon.armor}')
+    for dragon in sorted(value, key=lambda x: x.plant_name):
+        print(f'-{dragon.plant_name} -> damage: {dragon.damage}, health: {dragon.health}, armor: {dragon.armor}')

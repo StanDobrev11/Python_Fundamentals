@@ -78,7 +78,7 @@ def last(last_list, count, odd_even):  # returns last odd/even elements as pe co
     count = int(count)
     if count > len(last_list):
         return last_list, "Invalid count"
-    last_list.reverse()
+    last_list.rev()
     if odd_even == "even":
         for item in last_list:
             if item % 2 == 0 and count > 0:
@@ -90,7 +90,7 @@ def last(last_list, count, odd_even):  # returns last odd/even elements as pe co
                 new_list.append(item)
                 count -= 1
     new_list.reverse()
-    last_list.reverse()
+    last_list.rev()
 
     return last_list, new_list
 
