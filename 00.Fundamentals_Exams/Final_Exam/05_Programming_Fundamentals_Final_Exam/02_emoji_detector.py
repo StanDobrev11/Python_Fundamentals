@@ -1,27 +1,18 @@
 import re
+from functools import reduce
 
-text_string = input()
+text = input()
 
-emoji_pattern = r'(?P<emoji>(?P<sep>::|\*\*)(?P<text>[A-Z][a-z]{2,})(?P=sep))'
-digit_pattern = r'\d'
+valid_pattern = r"(::|\*\*)([A-Z][a-z]{2,})(\1)"
+valid_emojy = [x.group() for x in re.finditer(valid_pattern, text)]
 
-cool_threshold_list = [int(x) for x in re.findall(digit_pattern, text_string)]
-cool_threshold = 1
-for number in cool_threshold_list:
-    cool_threshold *= number
+cool_threshold_list = [int(num) for num in text if num.isdigit()]
+cool_threshold = reduce(lambda x, y: x * y, cool_threshold_list)
 
-emoji_list = [x.group('emoji') for x in re.finditer(emoji_pattern, text_string)]
+print(f"Cool threshold: {cool_threshold}")
+print(f"{len(valid_emojy)} emojis found in the text. The cool ones are:")
 
-emoji_dict = {}
-for emoji in emoji_list:
-    emoji_sliced = emoji[2:-2]
-    emoji_coolness = 0
-    for letter in emoji_sliced:
-        emoji_coolness += ord(letter)
-    emoji_dict[emoji] = emoji_coolness
-
-print(f'Cool threshold: {cool_threshold}')
-print(f'{len(emoji_dict)} emojis found in the text. The cool ones are:')
-for emoji, coolness in emoji_dict.items():
+for emojy in valid_emojy:
+    coolness = sum(ord(x) for x in emojy if x.isalpha())
     if coolness >= cool_threshold:
-        print(f'{emoji}')
+        print(emojy)
